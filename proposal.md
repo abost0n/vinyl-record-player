@@ -2,7 +2,7 @@
 
 ## Repository
 
-https://github.com/yourusername/vinyl-record-player
+(https://github.com/abost0n/vinyl-record-player.git)
 
 ## Description
 
