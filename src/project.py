@@ -96,7 +96,7 @@ def load_album_cover():
         album_loaded = True
 
 def draw_record(angle):
-
+    
     record_surface = pygame.Surface((500, 500), pygame.SRCALPHA)
 
     center = (250, 250)
@@ -105,15 +105,16 @@ def draw_record(angle):
     pygame.draw.circle(record_surface, BLACK, center, 230)
 
     # Grooves
-    for radius in range(80, 220, 10):
+    # Grooves (enhanced visual depth)
+for radius in range(70, 230, 8):
 
-        pygame.draw.circle(
-            record_surface,
-            GRAY,
-            center,
-            radius,
-            1
-        )
+    pygame.draw.circle(
+       
+        (40, 40, 40),
+        center,
+        radius,
+        1
+    )
 
     # Center label
     pygame.draw.circle(record_surface, RED, center, 70)
@@ -137,7 +138,9 @@ def draw_buttons():
     font = pygame.font.SysFont("Arial", 28)
 
     # Buttons
-    pygame.draw.rect(screen, GREEN, play_button, border_radius=10)
+    color = GREEN if playing else (120, 200, 120)
+
+    pygame.draw.rect(screen, color, play_button, border_radius=10)
 
     pygame.draw.rect(screen, GRAY, upload_music_button, border_radius=10)
 
@@ -200,7 +203,7 @@ def draw_needle():
     else:
         target_angle = -40
 
-    needle_angle += (target_angle - needle_angle) * 0.08
+    needle_angle += (target_angle - needle_angle) * 0.05
 
     end_x = base_x + math.cos(math.radians(needle_angle)) * length
 
@@ -229,7 +232,12 @@ def draw_title():
     )
 
     screen.blit(title, (320, 40))
+def draw_button_outline(text, x, y, w, h):
+    font = pygame.font.SysFont("Arial", 20)
+    label = font.render(text, True, WHITE)
 
+    pygame.draw.rect(screen, (80, 80, 80), (x, y, w, h), 2, border_radius=8)
+    screen.blit(label, (x + 10, y + 12))
 running = True
 
 dragging_volume = False
