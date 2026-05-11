@@ -21,14 +21,19 @@ WHITE = (255, 255, 255)
 RED = (200, 50, 50)
 GREEN = (50, 200, 100)
 
-# STATE
+# Variables
 rotation = 0
 playing = False
 music_loaded = False
 album_loaded = False
 volume = 0.5
 
+
 needle_angle = -40
+
+# SCRATCH FEATURE VARIABLES
+dragging_record = False
+last_mouse_angle = 0
 album_cover_surface = None
 
 record_center = (600, 350)
