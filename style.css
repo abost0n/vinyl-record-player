@@ -1,0 +1,33 @@
+body {
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial;
+}
+
+.player {
+    text-align: center;
+}
+
+.vinyl {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #000 40%, #111 60%, #000 75%);
+    border-radius: 50%;
+    margin: 20px auto;
+    position: relative;
+}
+
+.label {
+    width: 80px;
+    height: 80px;
+    background: crimson;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
