@@ -20,20 +20,21 @@ GRAY = (50, 50, 50)
 WHITE = (255, 255, 255)
 RED = (200, 50, 50)
 GREEN = (50, 200, 100)
+PINK = (255, 105, 180)
 
-# Variables
+# VARIABLES
 rotation = 0
 playing = False
 music_loaded = False
 album_loaded = False
 volume = 0.5
 
-
 needle_angle = -40
 
 # SCRATCH FEATURE VARIABLES
 dragging_record = False
 last_mouse_angle = 0
+
 album_cover_surface = None
 
 record_center = (600, 350)
@@ -94,6 +95,21 @@ def load_album_cover():
 
 
 # -----------------------
+# SCRATCH HELPERS
+# -----------------------
+def get_mouse_angle(mouse_pos):
+    dx = mouse_pos[0] - record_center[0]
+    dy = mouse_pos[1] - record_center[1]
+    return math.degrees(math.atan2(dy, dx))
+
+
+def is_on_record(mouse_pos):
+    dx = mouse_pos[0] - record_center[0]
+    dy = mouse_pos[1] - record_center[1]
+    return math.sqrt(dx*dx + dy*dy) < 230
+
+
+# -----------------------
 # DRAW RECORD
 # -----------------------
 def draw_record(angle):
@@ -101,17 +117,13 @@ def draw_record(angle):
     record_surface = pygame.Surface((500, 500), pygame.SRCALPHA)
     center = (250, 250)
 
-    # vinyl base
     pygame.draw.circle(record_surface, BLACK, center, 230)
 
-    # grooves
     for radius in range(70, 230, 10):
         pygame.draw.circle(record_surface, (40, 40, 40), center, radius, 1)
 
-    # label
     pygame.draw.circle(record_surface, RED, center, 70)
 
-    # album cover
     if album_loaded and album_cover_surface:
         rect = album_cover_surface.get_rect(center=center)
         record_surface.blit(album_cover_surface, rect)
@@ -127,7 +139,7 @@ def draw_record(angle):
 def draw_buttons():
     font = pygame.font.SysFont("Arial", 28)
 
-    pygame.draw.rect(screen, GREEN if playing else GRAY, play_button, border_radius=10)
+    pygame.draw.rect(screen, PINK if playing else GRAY, play_button, border_radius=10)
     pygame.draw.rect(screen, GRAY, upload_music_button, border_radius=10)
     pygame.draw.rect(screen, GRAY, upload_cover_button, border_radius=10)
 
@@ -157,7 +169,6 @@ def handle_volume(mouse_x):
 
     slider_x = max(900, min(mouse_x, 1100))
     volume = (slider_x - 900) / 200
-
     pygame.mixer.music.set_volume(volume)
 
 
@@ -231,14 +242,25 @@ while running:
             if knob_rect.collidepoint(mouse):
                 dragging_volume = True
 
+            if is_on_record(mouse):
+                dragging_record = True
+                last_mouse_angle = get_mouse_angle(mouse)
+
         if event.type == pygame.MOUSEBUTTONUP:
             dragging_volume = False
+            dragging_record = False
 
         if event.type == pygame.MOUSEMOTION:
+
             if dragging_volume:
                 handle_volume(event.pos[0])
 
-    # ANIMATION
+            if dragging_record:
+                current_angle = get_mouse_angle(event.pos)
+                delta = current_angle - last_mouse_angle
+                rotation += delta * 2
+                last_mouse_angle = current_angle
+
     if playing:
         rotation += 1
 
